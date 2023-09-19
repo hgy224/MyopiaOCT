@@ -8,12 +8,12 @@ import models_vit
 import torch.nn.functional as F
 
 
-class MyopiaOCTNet(nn.Module):
+class AMFF(nn.Module):
     def __init__(self, vit_model_name='vit_large_patch16', in_chans=12, classes_num=4, drop_path_rate=0.1,
                  conv_out_channels=(10, 10), conv_ksizes=(2, 3), scaling_factors=(0.75, 1.0, 1.25),
                  reduction_ratio=16,
                  top_k=5):
-        super(MyopiaOCTNet, self).__init__()
+        super(AMFF, self).__init__()
         self.scaling_factors = scaling_factors
         # ViT
         self.feature_extractor = models_vit.__dict__[vit_model_name](
@@ -158,7 +158,7 @@ class AvgTopKPool(nn.Module):
 
 if __name__ == '__main__':
     # a = torch.rand((32, 12, 224, 224))
-    model = MyopiaOCTNet()
+    model = AMFF()
     checkpoint = torch.load('/data/home/huanggengyou/mae/output_large/checkpoint-399.pth', map_location='cpu')['model']
 
     checkpoint = collections.OrderedDict([('feature_extractor.' + k, v) if k.startswith('blocks') or k.startswith('cls_token') or k.startswith('pos_embed') or k.startswith('patch_embed') else (k, v) for k, v in checkpoint.items()])

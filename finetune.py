@@ -15,7 +15,7 @@ import torch
 import torch.backends.cudnn as cudnn
 from torch.utils.tensorboard import SummaryWriter
 
-from models_myopia import MyopiaOCTNet
+from models_myopia import AMFF
 
 # assert timm.__version__ == "0.3.2" # version check
 from timm.models.layers import trunc_normal_
@@ -345,8 +345,8 @@ def main(args):
             prob=args.mixup_prob, switch_prob=args.mixup_switch_prob, mode=args.mixup_mode,
             label_smoothing=args.smoothing, num_classes=args.nb_classes)
 
-    model = MyopiaOCTNet(args.model, in_chans=args.in_chans, classes_num=args.nb_classes,
-                         drop_path_rate=args.drop_path)
+    model = AMFF(args.model, in_chans=args.in_chans, classes_num=args.nb_classes,
+                 drop_path_rate=args.drop_path)
 
     if args.finetune and not args.eval:
         checkpoint = torch.load(args.finetune, map_location='cpu')
